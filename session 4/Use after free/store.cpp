@@ -13,7 +13,7 @@ int main() {
 
     CROW_ROUTE(app, "/order/confirm")
     ([&order_price]() -> std::string {
-        // proccess_ticket(order_price)
+         proccess_ticket(order_price)
 
         return "The price $" + std::to_string(*order_price) + " was noted on your ticket and will be charged upon entry";  // View the memory data at the pointer address
     });
@@ -23,3 +23,4 @@ int main() {
         delete order_price; // Release the memory
         return "Order canceled";
     });
+}
