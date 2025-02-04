@@ -99,74 +99,26 @@ Below is an example of how to design API endpoints to enforce RBAC for radiology
 
 ---
 
-### **RBAC Enforcement in the API**
+# Step 1: Define Roles and Permissions
+roles = {
+    "Admin": ["create", "read", "update", "delete"],
+    "Editor": ["create", "read", "update"],
+    "Viewer": ["read"]
+}
 
-1. **Authentication and Authorization:**
-   - Use a token-based authentication system (e.g., JWT) to identify users and their roles.
-   - Include the user's role in the token payload.
+# Step 2: Create User-Role Mapping
+users = {
+    "User1": "Admin",
+    "User2": "Editor",
+    "User3": "Viewer"
+}
 
-2. **Middleware for Role Validation:**
-   - Implement middleware to validate the user's role before processing each request.
-   - Example (pseudo-code):
-     ```python
-     def role_required(allowed_roles):
-         def decorator(func):
-             def wrapper(request, *args, **kwargs):
-                 user_role = request.user.role
-                 if user_role not in allowed_roles:
-                     return Response("Unauthorized", status=403)
-                 return func(request, *args, **kwargs)
-             return wrapper
-         return decorator
-     ```
 
-3. **Data Filtering:**
-   - For endpoints like `GET /api/radiology-reports`, filter results based on the user's role.
-   - Example:
-     - A physician should only see reports for their patients.
-     - A patient should only see their own reports.
+# Step 3: Implement Access Control Logic
+function hasPermission(user, action):
+    role = users[user]  # Get the user's role
+    if role in roles:
+        if action in roles[role]:  # Check if the role has the required permission
+            return True
+    return False
 
-4. **Audit Logs:**
-   - Log all access and modifications to radiology reports for auditing purposes.
-   - Include details like user ID, role, timestamp, and action performed.
-
----
-
-### **Example API Flow**
-
-1. **User Authentication:**
-   - A user logs in and receives a JWT token with their role (e.g., `role: "radiologist"`).
-
-2. **Accessing a Radiology Report:**
-   - The user makes a `GET` request to `/api/radiology-reports/{reportId}`.
-   - The API checks the user's role and permissions:
-     - If the user is a radiologist, physician, or administrator, allow access.
-     - If the user is a patient, ensure the report belongs to them.
-
-3. **Updating a Radiology Report:**
-   - A radiologist makes a `PUT` request to `/api/radiology-reports/{reportId}`.
-   - The API validates the user's role and allows the update.
-
-4. **Deleting a Radiology Report:**
-   - An administrator makes a `DELETE` request to `/api/radiology-reports/{reportId}`.
-   - The API validates the user's role and allows the deletion.
-
----
-
-### **Security Considerations**
-
-1. **Data Encryption:**
-   - Encrypt radiology reports at rest and in transit (e.g., using TLS for API communication).
-
-2. **Rate Limiting:**
-   - Implement rate limiting to prevent abuse of the API.
-
-3. **Input Validation:**
-   - Validate all inputs to prevent injection attacks or malformed data.
-
-4. **Regular Audits:**
-   - Conduct regular security audits to ensure compliance with regulations and identify vulnerabilities.
-
----
-
-By implementing RBAC in your API, you can ensure that only authorized users can access, modify, or delete radiology reports, while maintaining compliance with data protection regulations.
