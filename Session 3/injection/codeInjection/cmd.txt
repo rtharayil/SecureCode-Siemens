@@ -1,0 +1,7 @@
+__import__('os').system('ls')
+
+
+
+
+# dont do
+__import__('os').system('rm -rf')
