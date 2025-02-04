@@ -6,6 +6,6 @@ app.post('/login', (req, res) => {
         start_session(username);
         redirect('/dashboard', 'Login successful!');
     } else {
-        redirect('/login', 'Username or password incorrect');
+        redirect('/login', 'Username  or password incorrect');
     }
 })
