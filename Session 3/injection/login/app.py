@@ -13,7 +13,7 @@ def init_db():
     c.execute('''CREATE TABLE IF NOT EXISTS users 
                  (id INTEGER PRIMARY KEY, username TEXT, password TEXT)''')
     c.execute("INSERT OR IGNORE INTO users (username, password) VALUES ('admin', 'admin123')")
-    c.execute("INSERT OR IGNORE INTO users (username, password) VALUES ('user', 'user123')")
+  
     
     # Create a table for customers if it doesn't exist
     c.execute('''CREATE TABLE IF NOT EXISTS customers 
@@ -31,8 +31,8 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Vulnerable login function (SQL Injection prone)
-def vulnerable_login(username, password):
+
+def login(username, password):
     conn = sqlite3.connect('example.db')
     c = conn.cursor()
     query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"
@@ -41,15 +41,7 @@ def vulnerable_login(username, password):
     conn.close()
     return result
 
-# Secure login function (using parameterized queries)
-def secure_login(username, password):
-    conn = sqlite3.connect('example.db')
-    c = conn.cursor()
-    query = "SELECT * FROM users WHERE username=? AND password=?"
-    c.execute(query, (username, password))
-    result = c.fetchone()
-    conn.close()
-    return result
+
 
 # Fetch all customers from the database
 def get_customers():
@@ -66,22 +58,16 @@ def index():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        login_type = request.form['login_type']
+       
 
-        if login_type == 'vulnerable':
-            user = vulnerable_login(username, password)
-            if user:
-                session['username'] = user[1]
-                return redirect(url_for('admin'))
-            else:
-                message = "Vulnerable Login Failed! Invalid credentials."
-        elif login_type == 'secure':
-            user = secure_login(username, password)
-            if user:
-                session['username'] = user[1]
-                return redirect(url_for('admin'))
-            else:
-                message = "Secure Login Failed! Invalid credentials."
+        
+        user = login(username, password)
+        if user:
+            session['username'] = user[1]
+            return redirect(url_for('admin'))
+        else:
+            message = "Login Failed! Invalid credentials."
+        
 
     return render_template('index.html', message=message)
 

@@ -16,11 +16,7 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             
-            <label for="login_type">Login Type:</label>
-            <select id="login_type" name="login_type">
-                <option value="vulnerable">Vulnerable Login</option>
-                <option value="secure">Secure Login</option>
-            </select>
+            
             
             <button type="submit">Login</button>
         </form>
@@ -31,15 +27,7 @@
             </div>
         {% endif %}
 
-        <div class="examples">
-            <h2>SQL Injection Examples</h2>
-            <p>Try these inputs in the <strong>Vulnerable Login</strong>:</p>
-            <ul>
-                <li>Username: <code>admin' --</code></li>
-                <li>Password: <em>anything</em></li>
-            </ul>
-            <p>This bypasses the password check using SQL injection.</p>
-        </div>
+        
     </div>
 </body>
 </html>

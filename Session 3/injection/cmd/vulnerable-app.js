@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 app.post('/ping', (req, res) => {
     const host = req.body.host;
 
-    // Vulnerable code: user input is directly passed to exec
+   
     exec(`ping -c 4 ${host}`, (error, stdout, stderr) => {
         if (error) {
             return res.send(`Error: ${stderr}`);
@@ -28,5 +28,5 @@ app.post('/ping', (req, res) => {
 });
 
 app.listen(3000, () => {
-    console.log('Vulnerable app running on http://localhost:3000');
+    console.log('ping app running on http://localhost:3000');
 });
