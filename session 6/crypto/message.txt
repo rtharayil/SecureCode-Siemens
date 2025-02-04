@@ -1,0 +1,2 @@
+This is a secret message that I want to encrypt using RSA.
+Only the recipient with the corresponding private key can decrypt it.
