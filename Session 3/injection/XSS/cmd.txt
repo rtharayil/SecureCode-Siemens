@@ -1,0 +1,32 @@
+http://localhost:5000/vulnerable?name=John%20Doe
+http://localhost:5000/vulnerable?name=Varsha%20Sharma
+
+
+
+
+
+http://localhost:5000/vulnerable?name=<script>alert('XSS Attack!')</script>
+http://localhost:5000/vulnerable?name=<script>document.write(document.cookie)</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from flask import escape
+
+@app.route('/secure')
+def secure():
+    name = request.args.get('name', 'Guest')
+    safe_name = escape(name)  # Escapes HTML/JS characters
+    return render_template_string(email_template, name=safe_name)
