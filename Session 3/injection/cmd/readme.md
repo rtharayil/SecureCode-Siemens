@@ -3,4 +3,4 @@
 
 npm install
 
-nodemon vulnerable-app.js
+node vulnerable-app.js
